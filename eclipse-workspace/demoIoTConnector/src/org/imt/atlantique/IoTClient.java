@@ -86,10 +86,10 @@ public class IoTClient implements CallBack, AccessPointListener {
 		}
 	}
 
-	private void changeActuator() {
+	private void changeActuator(String elementName, String command) {
 		Map<String, Object> dataValue = new ConcurrentSkipListMap<String, Object>();
-		dataValue.put("elementName", "");
-		dataValue.put("command", "");
+		dataValue.put("elementName",  elementName);
+		dataValue.put("command", command);
 		this.actuatorDeviceAccessPoint.callAction("CommandService", "ExecuteCommand", dataValue);
 	}
 
