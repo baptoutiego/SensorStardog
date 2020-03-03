@@ -1,0 +1,27 @@
+
+#Method that gets de data
+public static void viewParameterValue(ParameterValue parameterValue) {
+		System.out.println("Name: " + parameterValue.getName() + " valeur :"
+				+ ParameterValueManagement.getString(parameterValue, null));
+
+		for (Iterator attributeIterator = parameterValue.attributes(); attributeIterator.hasNext();) {
+			ParameterAttribute attribut = (ParameterAttribute) attributeIterator.next();
+			System.out.println("ATTRIBUT: " + attribut.getName() + " : " + attribut.getValue());
+		}
+		if (parameterValue.hasChildren())
+			for (Iterator iterator = parameterValue.children(); iterator.hasNext();)
+				viewParameterValue((ParameterValue) iterator.next());
+
+	}
+
+
+#What goes out
+
+Name: {http://www.enstb.org/upas/Notification}listData valeur :null
+ATTRIBUT: {http://www.enstb.org/upas/Notification}timesStamp : 1583252757961
+Name: {http://www.enstb.org/upas/Notification}data valeur :null
+ATTRIBUT: {http://www.enstb.org/upas/Notification}unit : %
+ATTRIBUT: {http://www.enstb.org/upas/Notification}value : 65.0
+ATTRIBUT: {http://www.enstb.org/upas/Notification}id : S1D1
+ATTRIBUT: {http://www.enstb.org/upas/Notification}name : Humidity
+
