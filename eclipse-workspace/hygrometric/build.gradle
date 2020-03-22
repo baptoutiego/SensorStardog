@@ -13,6 +13,7 @@ repositories {
 dependencies {
     // Core Dependencies
     compile ('com.complexible.stardog:client-http:4.2.4')
+    compile ('com.stardog:stardog-spring:6.1.1')
 }
 
 mainClassName  = "hygrometric.ClientStardog"

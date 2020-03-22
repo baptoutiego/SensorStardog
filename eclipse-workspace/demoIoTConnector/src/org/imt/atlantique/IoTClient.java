@@ -120,7 +120,6 @@ public class IoTClient implements CallBack, AccessPointListener {
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
 		IoTClient iotClient = new IoTClient();
-
 	}
 
 }

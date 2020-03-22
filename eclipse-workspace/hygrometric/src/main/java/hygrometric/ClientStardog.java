@@ -42,15 +42,15 @@ public class ClientStardog {
 	        // A look at what databases are currently in Stardog
 	        aConn.list().forEach(item -> System.out.println(item));
 
-	        // Checks to see if the 'myNewDB' is in Stardog. If it is, we are
-	        // going to drop it so we are starting fresh
-			if (aConn.list().contains(dbName)) {aConn.drop(dbName);}
+	        // Checks to see if the dbName database is in Stardog. If it isn't, we are
+	        // going to create it.
+			if (!aConn.list().contains(dbName)) {
 	        // Convenience function for creating a persistent
 	        // database with all the default settings.
-	        aConn.disk(dbName).create();
+				aConn.disk(dbName).create();
+			}
 	    }
 	}
-	
 	
 
 	 /**
@@ -58,7 +58,7 @@ public class ClientStardog {
      * @param connectionConfig the configuration for the connection pool
      * @return the newly created pool which we will use to get our Connections
      */
-    private static ConnectionPool createConnectionPool(ConnectionConfiguration connectionConfig) {
+    public static ConnectionPool createConnectionPool(ConnectionConfiguration connectionConfig) {
         ConnectionPoolConfig poolConfig = ConnectionPoolConfig
                 .using(connectionConfig)
                 .minPool(minPool)
@@ -73,8 +73,41 @@ public class ClientStardog {
         return connectionPool.obtain();
     }
 	
-	public static void main(String[] args) throws StardogException, FileNotFoundException {
+	public static Connection getConnection() {
 		createAdminConnection();
+		
+		ConnectionConfiguration connectionConfig = ConnectionConfiguration
+		        .to(dbName)
+		        .server(url)
+		        .reasoning(reasoningType)
+		        .credentials(username, password);
+		// creates the Stardog connection pool
+		ConnectionPool connectionPool = createConnectionPool(connectionConfig);
+		return getConnection(connectionPool);
+	}
+	
+	public static void resetTable() {
+		try (final AdminConnection aConn = AdminConnectionConfiguration.toServer(url)
+	        .credentials(username, password)
+	        .connect()) {
+
+	            // A look at what databses are currently in Stardog - needed api and http
+	            aConn.list().forEach(item -> System.out.println(item));
+
+	            // Checks to see if the 'myNewDB' is in Stardog. If it is, we are going to drop it so we are
+	            // starting fresh
+	            if (aConn.list().contains(dbName)) {
+	                aConn.drop(dbName);
+	            }
+
+	            // Convenience function for creating a non-persistent in-memory database with all the default settings.
+	            aConn.disk(dbName).create();
+	            aConn.close();
+	        }
+	    }
+	public static void main(String[] args) throws StardogException, FileNotFoundException {
+		
+		resetTable();
 		
 		ConnectionConfiguration connectionConfig = ConnectionConfiguration
 		        .to(dbName)
@@ -85,12 +118,12 @@ public class ClientStardog {
 		ConnectionPool connectionPool = createConnectionPool(connectionConfig);
 		Connection connection = getConnection(connectionPool);
 		// first start a transaction. This will generate the contents of
-		// the databse from the N3 file.
+		// the database from the N3 file.
 		connection.begin();
 		// declare the transaction
 		connection.add().io()
 		                .format(RDFFormats.N3)
-		                .stream(new FileInputStream("src/main/ressources/marvel.rdf"));
+		                .stream(new FileInputStream("src/main/ressources/sensor.rdf"));
 		// and commit the change
 		connection.commit();
 

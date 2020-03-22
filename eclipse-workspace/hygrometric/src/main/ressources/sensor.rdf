@@ -1,0 +1,27 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix time: <http://www.w3.org/2006/time#>.
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix ssn:  <http://www.w3.org/ns/ssn/> .
+@prefix sensor: <http://api.stardog.com/sensor/> .
+@prefix obs: <http://api.stardog.com/observation/> .
+
+<Temperature> rdf:type sosa:ObservableProperty;
+	rdfs:label "Temperature"@en.
+
+<Humidity> rdf:type sosa:ObservableProperty;
+	rdfs:label "Humidity"@en.
+
+<sensor/S1D1> rdf:type sosa:Sensor ;
+	rdfs:label "S1D1"@en;
+	rdfs:comment "Humidity sensor"@en;
+	sosa:observes <humidity>.
+
+<sensor/S1D2> rdf:type sosa:Sensor ;
+	rdfs:label "S1D2"@en;
+	rdfs:comment "Temperature sensor"@en;
+	sosa:observes <temperature>.
+
+<sensor/S4D1> rdf:type sosa:Sensor ;
+	rdfs:label "S4D1"@en;
+	rdfs:comment "Temperature sensor"@en;
+	sosa:observes <temperature>.
